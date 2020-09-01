@@ -1,0 +1,26 @@
+/* Navigation bar */
+
+.navbar-brand {
+  font-size: 2rem;
+}
+
+.navbar-text {
+  font-size: 2rem;
+}
+
+/* Main section */
+#question {
+  margin-top: 10rem;
+  color: black;
+}
+
+#answers {
+  color: #999d9f;
+  font-weight: 400;
+}
+.mouse-over {
+  background-color: #333b3f;
+  display: inline-block;
+  cursor: pointer;
+  color: white;
+}
