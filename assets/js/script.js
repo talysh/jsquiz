@@ -1,21 +1,40 @@
 // HTML elements
+// Navigation bar elements
 var highscoresLink = document.getElementById("highscores");
 var remainingTimeLabel = document.getElementById("number-of-secs");
+
+
+// Question 
 var questionField = document.getElementById("question");
+var answersContainer = document.getElementById("answers");
 var answerA = document.getElementById("answerA");
 var answerB = document.getElementById("answerB");
 var answerC = document.getElementById("answerC");
 var answerD = document.getElementById("answerD");
-var answersContainer = document.getElementById("answers");
+
+
+var startButton = document.getElementById("start-button");
+var welcomeScreen = document.getElementById("welcome-screen");
+var quizSection = document.getElementById("quiz-section");
+
+
+var modalHighScores = document.getElementById("highscores-display");
+var clearHighScoresButton = document.getElementById("clear-highscores");
+var userScoreOutput = document.getElementById("user-score");
+
+// Time
+var interval;
+var secondsLeft = 60;
 
 var userChoice;
 var questionNumber = 0;
 var score = 0;
 
-var interval;
-var secondsLeft = 75;
-
-var highscores = [];
+var highScoresArray = [
+    { name: "Taleh", score: 100 },
+    { name: "John", score: 10 },
+    { name: "Smith", score: 0 },
+];
 
 // An array of question objects 
 
@@ -52,29 +71,68 @@ var questionSet = [
 function displayQuestion(question) {
     questionField.textContent = question.question;
     answerA.textContent = question.answers[0];
-    answerB.textContent = question.answers[1]
-    answerC.textContent = question.answers[2]
-    answerD.textContent = question.answers[3]
+    answerB.textContent = question.answers[1];
+    answerC.textContent = question.answers[2];
+    answerD.textContent = question.answers[3];
+
+    // answerA.classList.remove("mouse-over");
+    // answerB.classList.remove("mouse-over");
+    // answerC.classList.remove("mouse-over");
+    // answerD.classList.remove("mouse-over");
+
 }
 
-// Check if user input is correct
+// Display time in navigation bar
+function displayTime() {
+    remainingTimeLabel.textContent = secondsLeft;
+}
 
-function checkAnswer(question) {
-    if (userChoice === question.correctChoice) {
-        score++;
-    } else {
-        if ((secondsLeft - 10) > 0) {
-            secondsLeft -= 10;
-        } else {
-            alert("you ran out of time");
-            secondsLeft = 0;
+// Start the quiz
+function startQuiz() {
+    displayQuestion(questionSet[questionNumber]);
+    interval = setInterval(function () {
+        displayTime();
+        secondsLeft--;
+        if (secondsLeft <= 0) {
+            submitScore();
         }
+    }, 1000);
 
+    localStorage.setItem("highscore", JSON.stringify(highScoresArray));
+}
+
+// Display highscores inside the modal
+function displayHighscores() {
+    var highScoreDiv = document.createElement("div");
+
+    var highScore = JSON.parse(localStorage.getItem('highscore'));
+    for (var i = 0; i < highScore.length; i++) {
+        var paragraph = document.createElement("p");
+        paragraph.textContent = (i + 1) + ". Name: " + highScore[i].name + " Score: " + highScore[i].score;
+        highScoreDiv.appendChild(paragraph);
     }
 
+    modalHighScores.innerHTML = highScoreDiv.innerHTML;
+
 }
 
-// What to do once user choice is made
+// Clear highscores from the highscores display
+function clearHighScores() {
+    localStorage.setItem('highscore', JSON.stringify({ name: "", score: 0 }));
+    displayHighscores();
+}
+
+
+function submitScore() {
+    clearInterval(interval);
+    secondsLeft = 0;
+    displayTime();
+    quizSection.classList.add("display-off")
+    userScoreOutput.textContent = "Your score is " + score;
+    $("#enter-highscore").modal("show");
+}
+
+// Handle the answer that user picks from multiple choice options
 
 function handleClick() {
 
@@ -83,33 +141,31 @@ function handleClick() {
     if (questionNumber < questionSet.length) {
         displayQuestion(questionSet[questionNumber])
     } else {
-        alert(score);
-        alert("You have come to end")
-        clearInterval(interval);
-        questionNumber = 0;
-        startQuiz();
+        submitScore();
     }
 }
 
+// Check if user input is correct, deduct 10 seconds if not.
 
-
-function startQuiz() {
-    displayQuestion(questionSet[questionNumber]);
-    interval = setInterval(function () {
-        remainingTimeLabel.textContent = secondsLeft;
-        secondsLeft--;
-        if (secondsLeft < 0) {
-            clearInterval(interval);
+function checkAnswer(question) {
+    if (userChoice === question.correctChoice) {
+        score++;
+    } else {
+        if ((secondsLeft - 10) > 0) {
+            secondsLeft -= 10;
+            displayTime();
+        } else {
+            submitScore();
         }
-    }, 1000);
+
+    }
 
 }
 
-startQuiz();
-
-
 
 // Event listeners
+// ===============
+// Take user answer on multiplce choice question
 
 answerA.addEventListener("click", function () {
     userChoice = "a";
@@ -136,11 +192,30 @@ answerD.addEventListener("click", function () {
 
 });
 
+highscoresLink.addEventListener("click", function (event) {
+    displayHighscores();
+});
 
+// Once the Start quiz button pressed, hide the welcome screen, show the first question and start the quiz
+
+startButton.addEventListener("click", function () {
+    welcomeScreen.classList.add("display-off");
+    quizSection.classList.remove("display-off");
+    startQuiz();
+});
+
+
+
+// Clear highscores from the highscores screen
+clearHighScoresButton.addEventListener("click", function () {
+    clearHighScores();
+});
+
+// Highlight a multiple choice answer on hover
 
 answersContainer.addEventListener("mouseover", function (event) {
     var hoveringOver = event.target;
-    if (hoveringOver.matches("p")) {
+    if (hoveringOver.matches("button")) {
         hoveringOver.classList.add("mouse-over");
     }
 

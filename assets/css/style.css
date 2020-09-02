@@ -1,5 +1,7 @@
 /* Navigation bar */
-
+#highscores {
+  cursor: pointer;
+}
 .navbar-brand {
   font-size: 2rem;
 }
@@ -13,14 +15,29 @@
   margin-top: 10rem;
   color: black;
 }
-
+/* Answers div */
 #answers {
   color: #999d9f;
   font-weight: 400;
 }
+
+/* Individual answer button */
+.answer {
+  background-color: white;
+  border: none;
+  color: #999d9f;
+}
+
+.answer:focus {
+  outline: none;
+}
+
 .mouse-over {
   background-color: #333b3f;
-  display: inline-block;
   cursor: pointer;
   color: white;
+}
+
+.display-off {
+  display: none;
 }
