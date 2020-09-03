@@ -21,20 +21,18 @@ var quizSection = document.getElementById("quiz-section");
 var modalHighScores = document.getElementById("highscores-display");
 var clearHighScoresButton = document.getElementById("clear-highscores");
 var userScoreOutput = document.getElementById("user-score");
+var submitScoreButton = document.getElementById("submit-score");
 
 // Time
 var interval;
-var secondsLeft = 60;
 
+
+var secondsLeft = 60;
 var userChoice;
 var questionNumber = 0;
 var score = 0;
 
-var highScoresArray = [
-    { name: "Taleh", score: 100 },
-    { name: "John", score: 10 },
-    { name: "Smith", score: 0 },
-];
+var highScoresArray = [];
 
 // An array of question objects 
 
@@ -66,6 +64,12 @@ var questionSet = [
     },
 ]
 
+function resetGame() {
+    secondsLeft = 60;
+    userChoice;
+    questionNumber = 0;
+    score = 0;
+}
 //Display a single question out of the whole set
 
 function displayQuestion(question) {
@@ -82,58 +86,73 @@ function displayQuestion(question) {
 
 }
 
-// Display time in navigation bar
-function displayTime() {
-    remainingTimeLabel.textContent = secondsLeft;
-}
 
 // Start the quiz
 function startQuiz() {
+    resetGame();
     displayQuestion(questionSet[questionNumber]);
     interval = setInterval(function () {
         displayTime();
         secondsLeft--;
         if (secondsLeft <= 0) {
-            submitScore();
+            endQuiz();
         }
     }, 1000);
 
-    localStorage.setItem("highscore", JSON.stringify(highScoresArray));
 }
+
+// End the quiz
+function endQuiz() {
+    score = score + secondsLeft;
+    clearInterval(interval);
+    secondsLeft = 0;
+    displayTime();
+    $("#quiz-section").hide();
+    $("#welcome-screen").show();
+    userScoreOutput.textContent = "Your score is " + score;
+    $("#enter-score").modal("show");
+}
+
 
 // Display highscores inside the modal
 function displayHighscores() {
-    var highScoreDiv = document.createElement("div");
 
-    var highScore = JSON.parse(localStorage.getItem('highscore'));
-    for (var i = 0; i < highScore.length; i++) {
-        var paragraph = document.createElement("p");
-        paragraph.textContent = (i + 1) + ". Name: " + highScore[i].name + " Score: " + highScore[i].score;
-        highScoreDiv.appendChild(paragraph);
+    var highScore = getHighScoreFromLocalDrive();
+
+    if (highScore == null) {
+        modalHighScores.innerHTML = "No high scores yet!";
+    } else {
+        var highScoreDiv = document.createElement("div");
+        for (var i = 0; i < highScore.length && i < 5; i++) {
+            var paragraph = document.createElement("p");
+            paragraph.textContent = (i + 1) + ". Name: " + highScore[i].name + " Score: " + highScore[i].score;
+            highScoreDiv.appendChild(paragraph);
+        }
+        modalHighScores.innerHTML = highScoreDiv.innerHTML;
     }
 
-    modalHighScores.innerHTML = highScoreDiv.innerHTML;
 
 }
 
 // Clear highscores from the highscores display
 function clearHighScores() {
-    localStorage.setItem('highscore', JSON.stringify({ name: "", score: 0 }));
+    localStorage.clear();
     displayHighscores();
 }
 
 
-function submitScore() {
-    clearInterval(interval);
-    secondsLeft = 0;
-    displayTime();
-    quizSection.classList.add("display-off")
-    userScoreOutput.textContent = "Your score is " + score;
-    $("#enter-highscore").modal("show");
+// Display time in navigation bar
+function displayTime() {
+    remainingTimeLabel.textContent = secondsLeft;
 }
 
-// Handle the answer that user picks from multiple choice options
+// Retrieve highscore list from localdrive
+function getHighScoreFromLocalDrive() {
+    return JSON.parse(localStorage.getItem('highscore'));
+}
 
+
+// Handle the answer that user picks from multiple choice options
 function handleClick() {
 
     checkAnswer(questionSet[questionNumber]);
@@ -141,7 +160,7 @@ function handleClick() {
     if (questionNumber < questionSet.length) {
         displayQuestion(questionSet[questionNumber])
     } else {
-        submitScore();
+        endQuiz();
     }
 }
 
@@ -155,7 +174,7 @@ function checkAnswer(question) {
             secondsLeft -= 10;
             displayTime();
         } else {
-            submitScore();
+            endQuiz();
         }
 
     }
@@ -199,12 +218,52 @@ highscoresLink.addEventListener("click", function (event) {
 // Once the Start quiz button pressed, hide the welcome screen, show the first question and start the quiz
 
 startButton.addEventListener("click", function () {
-    welcomeScreen.classList.add("display-off");
-    quizSection.classList.remove("display-off");
+    $("#welcome-screen").hide();
+    $("#quiz-section").show();
     startQuiz();
 });
 
 
+
+// Submit score 
+submitScoreButton.addEventListener("click", function () {
+
+    var highScore = getHighScoreFromLocalDrive();
+    var highScoreUnchanged = true;
+
+    // If user did not input a name, set the name as NoName
+    var name = $("#initials").val();
+    if (name.trim() === "") {
+        name = "NoName";
+    }
+
+    // Automaticall add score to highscore, if no previous scores
+    var i = 0;
+    if (highScore === null) {
+        highScore = [{ "name": name, "score": score }];
+    } else {
+
+        // If user score is bigger than any high score on the board, insert user score at that spot
+        while (i < 5 && i < highScore.length && highScoreUnchanged) {
+            if (score > highScore[i].score) {
+                highScore.splice(i, 0, { "name": name, "score": score })
+                highScoreUnchanged = false;
+            }
+            i++;
+        }
+
+        // If there are less than 5 highscores, add user score to high score list
+        if (i < 5 && highScoreUnchanged) {
+            highScore.push({ "name": name, "score": score });
+        }
+    }
+
+    localStorage.setItem("highscore", JSON.stringify(highScore));
+    $("#enter-score").modal("hide");
+    displayHighscores();
+    $("#highscores-modal").modal("show");
+
+});
 
 // Clear highscores from the highscores screen
 clearHighScoresButton.addEventListener("click", function () {
