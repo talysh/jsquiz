@@ -152,13 +152,20 @@ function getHighScoreFromLocalDrive() {
 // Handle the answer that user picks from multiple choice options
 function handleClick() {
 
-    checkAnswer(questionSet[questionNumber]);
-    questionNumber++;
-    if (questionNumber < questionSet.length) {
-        displayQuestion(questionSet[questionNumber])
-    } else {
-        endQuiz();
-    }
+    setTimeout(function () {
+
+        answersContainer.querySelectorAll("button").forEach(button => {
+            button.classList.remove("hover");
+        });
+
+        checkAnswer(questionSet[questionNumber]);
+        questionNumber++;
+        if (questionNumber < questionSet.length) {
+            displayQuestion(questionSet[questionNumber])
+        } else {
+            endQuiz();
+        }
+    }, 300);
 }
 
 // Check if user input is correct, deduct 10 seconds if not.
@@ -185,35 +192,25 @@ function checkAnswer(question) {
 
 answerA.addEventListener("click", function () {
     userChoice = "a";
-    setTimeout(function () {
-        handleClick();
-    }, 300);
-
+    handleClick();
 
 });
 
 answerB.addEventListener("click", function () {
     userChoice = "b";
-    setTimeout(function () {
-        handleClick();
-    }, 300);
-
+    handleClick();
 
 });
 
 answerC.addEventListener("click", function () {
     userChoice = "c";
-    setTimeout(function () {
-        handleClick();
-    }, 300);
+    handleClick();
 
 });
 
 answerD.addEventListener("click", function () {
     userChoice = "d";
-    setTimeout(function () {
-        handleClick();
-    }, 300);
+    handleClick();
 
 });
 
@@ -281,15 +278,11 @@ clearHighScoresButton.addEventListener("click", function () {
 answersContainer.addEventListener("mouseover", function (event) {
     var hoveringOver = event.target;
     if (hoveringOver.matches("button")) {
-        hoveringOver.classList.add("mouse-over");
         hoveringOver.classList.add("hover");
-
     }
-
 });
 
 answersContainer.addEventListener("mouseout", function (event) {
     var hoveringOver = event.target;
-    hoveringOver.classList.remove("mouse-over");
     hoveringOver.classList.remove("hover");
 });

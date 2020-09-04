@@ -29,19 +29,17 @@
   color: #999d9f;
 }
 
-.hover {
-  transform: translateY(-0.1rem);
-  box-shadow: 0 0.2rem 0.5rem 0 #333b3f;
-  transition: transform 150ms;
-}
 .answer:focus {
   outline: none;
 }
 
-.mouse-over {
+button.hover {
   background-color: #333b3f;
-  cursor: pointer;
+  box-shadow: 0 0.2rem 0.5rem 0 #333b3f;
   color: white;
+  cursor: pointer;
+  transform: translateY(-0.1rem);
+  transition: transform 150ms;
 }
 
 .display-off {
@@ -63,4 +61,8 @@
 
 #footer-text {
   font-size: 1rem;
+}
+
+#quiz-section, #welcome-screen {
+  padding-bottom: 6rem;
 }
