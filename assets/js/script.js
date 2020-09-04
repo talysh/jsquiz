@@ -23,19 +23,21 @@ var clearHighScoresButton = document.getElementById("clear-highscores");
 var userScoreOutput = document.getElementById("user-score");
 var submitScoreButton = document.getElementById("submit-score");
 
-// Time
 var interval;
-
-
 var secondsLeft = 60;
+
 var userChoice;
 var questionNumber = 0;
 var score = 0;
-
 var highScoresArray = [];
 
-// An array of question objects 
+//Number of seconds to deduct if the answer is wrong
+var penaltyDeduction = 10;
 
+//The number of highscores to store in memory
+var numberOfHighscores = 5;
+
+// An array of question objects 
 var questionSet = [
     {
         question: "Commonly used data types DO NOT include:",
@@ -72,18 +74,13 @@ function resetGame() {
 }
 //Display a single question out of the whole set
 
+
 function displayQuestion(question) {
     questionField.textContent = question.question;
     answerA.textContent = question.answers[0];
     answerB.textContent = question.answers[1];
     answerC.textContent = question.answers[2];
     answerD.textContent = question.answers[3];
-
-    // answerA.classList.remove("mouse-over");
-    // answerB.classList.remove("mouse-over");
-    // answerC.classList.remove("mouse-over");
-    // answerD.classList.remove("mouse-over");
-
 }
 
 
@@ -123,7 +120,7 @@ function displayHighscores() {
         modalHighScores.innerHTML = "No high scores yet!";
     } else {
         var highScoreDiv = document.createElement("div");
-        for (var i = 0; i < highScore.length && i < 5; i++) {
+        for (var i = 0; i < highScore.length && i < numberOfHighscores; i++) {
             var paragraph = document.createElement("p");
             paragraph.textContent = (i + 1) + ". Name: " + highScore[i].name + " Score: " + highScore[i].score;
             highScoreDiv.appendChild(paragraph);
@@ -170,8 +167,8 @@ function checkAnswer(question) {
     if (userChoice === question.correctChoice) {
         score++;
     } else {
-        if ((secondsLeft - 10) > 0) {
-            secondsLeft -= 10;
+        if ((secondsLeft - penaltyDeduction) > 0) {
+            secondsLeft -= penaltyDeduction;
             displayTime();
         } else {
             endQuiz();
@@ -188,26 +185,35 @@ function checkAnswer(question) {
 
 answerA.addEventListener("click", function () {
     userChoice = "a";
-    handleClick();
+    setTimeout(function () {
+        handleClick();
+    }, 300);
+
 
 });
 
 answerB.addEventListener("click", function () {
     userChoice = "b";
-    handleClick();
+    setTimeout(function () {
+        handleClick();
+    }, 300);
 
 
 });
 
 answerC.addEventListener("click", function () {
     userChoice = "c";
-    handleClick();
+    setTimeout(function () {
+        handleClick();
+    }, 300);
 
 });
 
 answerD.addEventListener("click", function () {
     userChoice = "d";
-    handleClick();
+    setTimeout(function () {
+        handleClick();
+    }, 300);
 
 });
 
@@ -244,7 +250,7 @@ submitScoreButton.addEventListener("click", function () {
     } else {
 
         // If user score is bigger than any high score on the board, insert user score at that spot
-        while (i < 5 && i < highScore.length && highScoreUnchanged) {
+        while (i < numberOfHighscores && i < highScore.length && highScoreUnchanged) {
             if (score > highScore[i].score) {
                 highScore.splice(i, 0, { "name": name, "score": score })
                 highScoreUnchanged = false;
@@ -253,7 +259,7 @@ submitScoreButton.addEventListener("click", function () {
         }
 
         // If there are less than 5 highscores, add user score to high score list
-        if (i < 5 && highScoreUnchanged) {
+        if (i < numberOfHighscores && highScoreUnchanged) {
             highScore.push({ "name": name, "score": score });
         }
     }
@@ -276,11 +282,14 @@ answersContainer.addEventListener("mouseover", function (event) {
     var hoveringOver = event.target;
     if (hoveringOver.matches("button")) {
         hoveringOver.classList.add("mouse-over");
+        hoveringOver.classList.add("hover");
+
     }
 
-})
+});
 
 answersContainer.addEventListener("mouseout", function (event) {
     var hoveringOver = event.target;
     hoveringOver.classList.remove("mouse-over");
-})
+    hoveringOver.classList.remove("hover");
+});

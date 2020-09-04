@@ -24,10 +24,16 @@
 /* Individual answer button */
 .answer {
   background-color: white;
-  border: none;
+  border: 1px solid #333b3f;
+  border-radius: 0.8rem;
   color: #999d9f;
 }
 
+.hover {
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.2rem 0.5rem 0 #333b3f;
+  transition: transform 150ms;
+}
 .answer:focus {
   outline: none;
 }
@@ -40,4 +46,21 @@
 
 .display-off {
   display: none;
+}
+
+/* Footer */
+.footer {
+  padding-top: 2.5rem;
+  position: fixed;
+  height: 6rem;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #343a40;
+  color: #e9ecef;
+  text-align: center;
+}
+
+#footer-text {
+  font-size: 1rem;
 }
