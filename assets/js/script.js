@@ -30,7 +30,7 @@ var highScoresArray = [];
 
 // Time variables
 var interval;
-var secondsLeft = 60;
+const gameTime = 120;
 
 // Quiz variables
 var userChoice;
@@ -71,10 +71,43 @@ var questionSet = [
         answers: ["JavaScript", "terminal/bash", "for loops", "console log",],
         correctChoice: "d",
     },
+    {
+        question: "______ tag is an extension to HTML that can enclose any number of JavaScript statements.",
+        answers: ["<SCRIPT>", "<BODY>", "<HEAD>", "<TITLE>",],
+        correctChoice: "a",
+    },
+    {
+        question: "Which of the following attribute can hold the JavaScript version?",
+        answers: ["LANGUAGE", "SCRIPT", "VERSION", "None of the above",],
+        correctChoice: "a",
+    },
+    {
+        question: "Inside which HTML element do we put the JavaScript?",
+        answers: ["<js>", "<scripting>", "<script>", "<javascript>",],
+        correctChoice: "c",
+    },
+    {
+        question: "Which of the following is not considered a JavaScript operator?",
+        answers: ["new", "this", "delete", "typeof",],
+        correctChoice: "b",
+    },
+    {
+        question: "______method evaluates a string of JavaScript code in the context of the specified object.",
+        answers: ["Eval", "ParseInt", "ParseFloat", "Efloat",],
+        correctChoice: "a",
+    },
+
+
+    // {
+    //     question: "",
+    //     answers: ["", "", "", "",],
+    //     correctChoice: "",
+    // },
+
 ]
 
 function resetGame() {
-    secondsLeft = 60;
+    secondsLeft = gameTime;
     userChoice;
     questionNumber = 0;
     score = 0;
