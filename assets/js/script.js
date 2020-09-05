@@ -3,8 +3,13 @@
 var highscoresLink = document.getElementById("highscores");
 var remainingTimeLabel = document.getElementById("number-of-secs");
 
+// Welcome screen and game start
+var welcomeScreen = document.getElementById("welcome-screen");
+var startButton = document.getElementById("start-button");
 
-// Question 
+
+// Quiz section
+var quizSection = document.getElementById("quiz-section");
 var questionField = document.getElementById("question");
 var answersContainer = document.getElementById("answers");
 var answerA = document.getElementById("answerA");
@@ -12,24 +17,26 @@ var answerB = document.getElementById("answerB");
 var answerC = document.getElementById("answerC");
 var answerD = document.getElementById("answerD");
 
+var feedbackSeparatorLine = document.getElementById("answer-feedback-separator");
+var answerFeedback = document.getElementById("answer-feedback");
 
-var startButton = document.getElementById("start-button");
-var welcomeScreen = document.getElementById("welcome-screen");
-var quizSection = document.getElementById("quiz-section");
-
-
+// Score and highscore tracking
 var modalHighScores = document.getElementById("highscores-display");
 var clearHighScoresButton = document.getElementById("clear-highscores");
 var userScoreOutput = document.getElementById("user-score");
 var submitScoreButton = document.getElementById("submit-score");
 
+var highScoresArray = [];
+
+// Time variables
 var interval;
 var secondsLeft = 60;
 
+// Quiz variables
 var userChoice;
 var questionNumber = 0;
 var score = 0;
-var highScoresArray = [];
+
 
 //Number of seconds to deduct if the answer is wrong
 var penaltyDeduction = 10;
@@ -76,6 +83,10 @@ function resetGame() {
 
 
 function displayQuestion(question) {
+
+    answersContainer.querySelectorAll("button").forEach(button => {
+        button.classList.remove("hover");
+    });
     questionField.textContent = question.question;
     answerA.textContent = question.answers[0];
     answerB.textContent = question.answers[1];
@@ -151,21 +162,20 @@ function getHighScoreFromLocalDrive() {
 
 // Handle the answer that user picks from multiple choice options
 function handleClick() {
+    feedbackSeparatorLine.classList.remove("display-off");
+    checkAnswer(questionSet[questionNumber]);
+    questionNumber++;
+    if (questionNumber < questionSet.length) {
+        setTimeout(function () {
+            displayQuestion(questionSet[questionNumber]);
+        }, 1000);
 
-    setTimeout(function () {
-
-        answersContainer.querySelectorAll("button").forEach(button => {
-            button.classList.remove("hover");
-        });
-
-        checkAnswer(questionSet[questionNumber]);
-        questionNumber++;
-        if (questionNumber < questionSet.length) {
-            displayQuestion(questionSet[questionNumber])
-        } else {
+    } else {
+        setTimeout(function () {
             endQuiz();
-        }
-    }, 300);
+        }, 1000);
+
+    }
 }
 
 // Check if user input is correct, deduct 10 seconds if not.
@@ -173,16 +183,22 @@ function handleClick() {
 function checkAnswer(question) {
     if (userChoice === question.correctChoice) {
         score++;
+        answerFeedback.textContent = "Correct!";
+        answerFeedback.style.color = "green";
     } else {
+        answerFeedback.textContent = "Wrong!";
+        answerFeedback.style.color = "red";
         if ((secondsLeft - penaltyDeduction) > 0) {
             secondsLeft -= penaltyDeduction;
             displayTime();
         } else {
             endQuiz();
         }
-
     }
-
+    setTimeout(function () {
+        answerFeedback.textContent = "";
+        feedbackSeparatorLine.classList.add("display-off");
+    }, 1000)
 }
 
 
