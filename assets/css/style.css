@@ -112,4 +112,8 @@ button.hover {
     height: 4rem;
     padding-top: 1.8rem;
   }
+
+  #question {
+    margin-top: 2rem;
+  }
 }

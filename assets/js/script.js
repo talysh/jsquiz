@@ -144,7 +144,7 @@ function startQuiz() {
 
 // End the quiz
 function endQuiz() {
-    score = score + secondsLeft;
+    score = score + Math.floor(secondsLeft * (score / questionSet.length));
     clearInterval(interval);
     secondsLeft = 0;
     displayTime();
