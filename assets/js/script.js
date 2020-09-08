@@ -28,6 +28,8 @@ var submitScoreButton = document.getElementById("submit-score");
 
 var highScoresArray = [];
 
+var acceptingAnswer;
+
 // Time variables
 var interval;
 const gameTime = 120;
@@ -72,16 +74,6 @@ var questionSet = [
         correctChoice: "d",
     },
     {
-        question: "______ tag is an extension to HTML that can enclose any number of JavaScript statements.",
-        answers: ["<SCRIPT>", "<BODY>", "<HEAD>", "<TITLE>",],
-        correctChoice: "a",
-    },
-    {
-        question: "Which of the following attribute can hold the JavaScript version?",
-        answers: ["LANGUAGE", "SCRIPT", "VERSION", "None of the above",],
-        correctChoice: "a",
-    },
-    {
         question: "Inside which HTML element do we put the JavaScript?",
         answers: ["<js>", "<scripting>", "<script>", "<javascript>",],
         correctChoice: "c",
@@ -116,10 +108,12 @@ function resetGame() {
 
 
 function displayQuestion(question) {
-
     answersContainer.querySelectorAll("button").forEach(button => {
         button.classList.remove("hover");
     });
+    setTimeout(function () {
+        acceptingAnswer = true;
+    }, 1000)
     questionField.textContent = question.question;
     answerA.textContent = question.answers[0];
     answerB.textContent = question.answers[1];
@@ -195,20 +189,26 @@ function getHighScoreFromLocalDrive() {
 
 // Handle the answer that user picks from multiple choice options
 function handleClick() {
-    feedbackSeparatorLine.classList.remove("display-off");
-    checkAnswer(questionSet[questionNumber]);
-    questionNumber++;
-    if (questionNumber < questionSet.length) {
-        setTimeout(function () {
-            displayQuestion(questionSet[questionNumber]);
-        }, 1000);
 
-    } else {
-        setTimeout(function () {
-            endQuiz();
-        }, 1000);
+    while (acceptingAnswer) {
+        acceptingAnswer = false;
+        feedbackSeparatorLine.classList.remove("display-off");
+        checkAnswer(questionSet[questionNumber]);
+        questionNumber++;
+        if (questionNumber < questionSet.length) {
+            setTimeout(function () {
+                displayQuestion(questionSet[questionNumber]);
+            }, 1000);
+
+        } else {
+            setTimeout(function () {
+                endQuiz();
+            }, 1000);
+
+        }
 
     }
+
 }
 
 // Check if user input is correct, deduct 10 seconds if not.
