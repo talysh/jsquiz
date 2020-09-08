@@ -23,10 +23,10 @@ If they scored in the top 5, their name and score will be displayed when view hi
 ![image](https://talysh.github.io/jsquiz/assets/selection-made.png)
 
 ## Correct answer chosen (on mobile screen)
-![image](https://talysh.github.io/jsquiz/assets/onmobile-correct-feedback.png)
+![image](https://talysh.github.io/jsquiz/assets/correct-feedback.png)
 
 ## Wrong answer chosen (on mobile screen)
-![image](https://talysh.github.io/jsquiz/assets/onmobile-wrong-feedback.png)
+![image](https://talysh.github.io/jsquiz/assets/wrong-feedback.png)
 
 ## Record score prompt when quiz ends
 ![image](https://talysh.github.io/jsquiz/assets/record-score.png)
