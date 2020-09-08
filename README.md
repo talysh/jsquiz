@@ -1,42 +1,35 @@
-# 04 Web APIs: Code Quiz
+## Javascript Quiz
 
-As you proceed in your career as a web developer, you will probably be asked to complete a coding assessment, which is typically a combination of multiple-choice questions and interactive challenges. Build a timed code quiz with multiple-choice questions. This app will run in the browser and feature dynamically updated HTML and CSS powered by your JavaScript code. It will also feature a clean and polished user interface and be responsive, ensuring that it adapts to multiple screen sizes.
+This is a webapp for javascript quiz.
 
-## User Story
+If user chooses to play, all of the questions in the question set are displayed. 
+Once an answer is chosen, a correct or wrong feedback is given, and the next question is displayed.
+For each wrong answer user is deducted 10 seconds of time.
+At the end of the game, if the user has time left, she will recieve bonus points in proportion with her correct answers.
+At the end of the game, user is prompted to enter their initials/name and their score is added to highscores list.
+If they scored in the top 5, their name and score will be displayed when view highscores display is open. 
 
-```
-AS A coding bootcamp student
-I WANT to take a timed quiz on JavaScript fundamentals that stores high scores
-SO THAT I can gauge my progress compared to my peers
-```
 
-## Acceptance Criteria
 
-```
-GIVEN I am taking a code quiz
-WHEN I click the start button
-THEN a timer starts and I am presented with a question
-WHEN I answer a question
-THEN I am presented with another question
-WHEN I answer a question incorrectly
-THEN time is subtracted from the clock
-WHEN all questions are answered or the timer reaches 0
-THEN the game is over
-WHEN the game is over
-THEN I can save my initials and score
-```
+## Screenshots
 
-The following animation demonstrates the application functionality:
+## Welcome screen
+![image](https://talysh.github.io/jsquiz/assets/welcome-screen.png)
 
-![code quiz](./Assets/04-web-apis-homework-demo.gif)
+## No highscores to display
+![image](https://talysh.github.io/jsquiz/assets/no-highscores.png)
 
-### Review
+## Answer selection made
+![image](https://talysh.github.io/jsquiz/assets/selection-made.png)
 
-You are required to submit the following for review:
+## Correct answer chosen (on mobile screen)
+![image](https://talysh.github.io/jsquiz/assets/onmobile-correct-feedback.png)
 
-* The URL of the functional, deployed application.
+## Wrong answer chosen (on mobile screen)
+![image](https://talysh.github.io/jsquiz/assets/onmobile-wrong-feedback.png)
 
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+## Record score prompt when quiz ends
+![image](https://talysh.github.io/jsquiz/assets/record-score.png)
 
-- - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+## View highscores
+![image](https://talysh.github.io/jsquiz/assets/highscores-display.png)
